@@ -444,11 +444,11 @@ class Esphome extends utils.Adapter {
 					this.log.debug(`DeviceData: ${JSON.stringify(deviceInfo)}`);
 
 					// Store device information into memory
-					const deviceName = this.replaceAll(deviceInfo.name, `:`, ``);
+					const deviceName = this.replaceAll((this.config.useName ? deviceInfo.name : deviceInfo.macAddress) , `:`, ``);
 
 					clientDetails[host].mac = deviceInfo.macAddress;
 					clientDetails[host].deviceName = deviceName;
-					clientDetails[host].deviceFriendlyName = deviceInfo.friendly_name;
+					clientDetails[host].deviceFriendlyName = (this.config.useName ? deviceInfo.friendlyName : deviceInfo.name);
 
 					await this.updateConnectionStatus(host, true, false, 'Initializing', false);
 
@@ -462,7 +462,7 @@ class Esphome extends utils.Adapter {
 					await this.extendObjectAsync(deviceName, {
 						type: 'device',
 						common: {
-							name: deviceInfo.friendly_name,
+							name: (this.config.useName ? deviceInfo.friendlyName : deviceInfo.name),
 							statusStates: {
 								onlineId: `${this.namespace}.${deviceName}.info._online`
 							}
@@ -472,7 +472,7 @@ class Esphome extends utils.Adapter {
 							name: clientDetails[host].deviceInfoName,
 							mac: deviceInfo.macAddress,
 							deviceName: deviceName,
-							deviceFriendlyName : deviceInfo.name,
+							deviceFriendlyName : deviceInfo.friendlyName,
 							apiPassword: clientDetails[host].apiPassword,
 							encryptionKey: clientDetails[host].encryptionKey,
 							encryptionKeyUsed : clientDetails[host].encryptionKeyUsed
@@ -1145,7 +1145,7 @@ class Esphome extends utils.Adapter {
 
 				// Ensure all known online states are set to false
 				if (clientDetails[device].mac != null) {
-					const deviceName = this.replaceAll(clientDetails[device].name, `:`, ``);
+					const deviceName = this.replaceAll(this.config.useName ? clientDetails[device].mac : clientDetails[device].name, `:`, ``);
 					if (clientDetails[device].connectStatus !== 'newly discovered') this.setState(`${deviceName}.info._online`, {val: false, ack: true});
 				}
 

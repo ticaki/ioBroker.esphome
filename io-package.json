@@ -175,6 +175,7 @@
     ],
     "native": {
         "ESPHomeDashboardVersion": "Always last available",
+        "useName": false,
         "reconnectInterval": 30,
         "apiPass": "",
         "encryptionKey": "",
