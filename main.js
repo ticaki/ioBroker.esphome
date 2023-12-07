@@ -448,7 +448,7 @@ class Esphome extends utils.Adapter {
 
 					clientDetails[host].mac = deviceInfo.macAddress;
 					clientDetails[host].deviceName = deviceName;
-					clientDetails[host].deviceFriendlyName = deviceInfo.name;
+					clientDetails[host].deviceFriendlyName = deviceInfo.friendly_name;
 
 					await this.updateConnectionStatus(host, true, false, 'Initializing', false);
 
