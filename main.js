@@ -444,7 +444,7 @@ class Esphome extends utils.Adapter {
 					this.log.debug(`DeviceData: ${JSON.stringify(deviceInfo)}`);
 
 					// Store device information into memory
-					const deviceName = this.replaceAll(deviceInfo.macAddress, `:`, ``);
+					const deviceName = this.replaceAll(deviceInfo.name, `:`, ``);
 
 					clientDetails[host].mac = deviceInfo.macAddress;
 					clientDetails[host].deviceName = deviceName;
@@ -462,7 +462,7 @@ class Esphome extends utils.Adapter {
 					await this.extendObjectAsync(deviceName, {
 						type: 'device',
 						common: {
-							name: deviceInfo.name,
+							name: deviceInfo.friendly_name,
 							statusStates: {
 								onlineId: `${this.namespace}.${deviceName}.info._online`
 							}
@@ -1145,7 +1145,7 @@ class Esphome extends utils.Adapter {
 
 				// Ensure all known online states are set to false
 				if (clientDetails[device].mac != null) {
-					const deviceName = this.replaceAll(clientDetails[device].mac, `:`, ``);
+					const deviceName = this.replaceAll(clientDetails[device].name, `:`, ``);
 					if (clientDetails[device].connectStatus !== 'newly discovered') this.setState(`${deviceName}.info._online`, {val: false, ack: true});
 				}
 
